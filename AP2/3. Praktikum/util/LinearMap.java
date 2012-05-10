@@ -1,6 +1,5 @@
 package util;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,10 @@ import java.util.List;
  * kann.
  */
 public class LinearMap<K,V> implements IMap<K,V> {
+	/**
+	 * Kennung "nicht gefunden".
+	 */
+	private static final int NOT_FOUND = -1;
 
 	/**
 	 * Anzahl der gespeicherten Adressen.
@@ -55,13 +58,6 @@ public class LinearMap<K,V> implements IMap<K,V> {
 	 * @throws NullPointerException wenn <code>key == null</code>
 	 */
 	public V put( K key, V value ) {
-		// Key gültig?
-		checkKey( key );
-
-		// Arraygroesse anpassen
-		if ( size == data.length )
-			adjustArrayLength();
-
 		// Position des Schlüsselwertes
 		int keyPos = indexOf( key );
 
@@ -71,6 +67,10 @@ public class LinearMap<K,V> implements IMap<K,V> {
 			// => alten Wert zurückgeben
 			return data[ keyPos ].setValue( value );
 		}
+
+		// Arraygroesse anpassen
+		if ( size == data.length )
+			adjustArrayLength();
 
 		// Schlüsselwert ist nicht vorhanden => neuer Eintrag
 		data[ size++ ] = new Entry<K, V>( key, value );
@@ -86,9 +86,6 @@ public class LinearMap<K,V> implements IMap<K,V> {
 	 * @throws NullPointerException wenn <code>key == null</code>.
 	 */
 	public V get( K key) {
-		// Key gültig?
-		checkKey( key );
-
 		// Position des Schlüesselwertes
 		int keyPos = indexOf( key );
 
@@ -108,18 +105,11 @@ public class LinearMap<K,V> implements IMap<K,V> {
 	 * @throws NullPointerException wenn <code>key == null</code>.
 	 */
 	public boolean containsKey( K key ) {
-		// Key gültig?
-		checkKey( key );
-
 		// Position des Schlüsselwertes
 		int keyPos = indexOf( key );
 
-		// Schlüsselwert ist vorhanden
-		if ( keyPos >= 0 )
-			return true;
-
-		// Schlüsselwert ist nicht vorhanden
-		return false;
+		// Schlüsselwert vorhanden?
+		return keyPos != NOT_FOUND;
 	}
 
 	/**
@@ -132,9 +122,6 @@ public class LinearMap<K,V> implements IMap<K,V> {
 	 * @throws NullPointerException wenn <code>key == null</code>.
 	 */
 	public V remove( K key ) {
-		// Key gültig?
-		checkKey( key );
-
 		// Position des Schlüsselwertes
 		int keyPos = indexOf( key );
 
@@ -169,7 +156,7 @@ public class LinearMap<K,V> implements IMap<K,V> {
 
 		// Aktuelle Daten durchlaufen
 		for( int i = 0; i < size; i++ ) {
-			// Leeren Werte überspringen
+			// Leere Werte überspringen
 			if ( null == data[i] )
 				continue;
 
@@ -214,12 +201,16 @@ public class LinearMap<K,V> implements IMap<K,V> {
 	 * @param key Objekt das gesucht wird.
 	 * @return Index des ersten Vorkommens oder -1 wenn nicht gefunden.
 	 */
-	public int indexOf( K key ) {
+	private int indexOf( K key ) {
+		// Key gültig?
+		checkKey( key );
+
+		// Key suchen
 		for ( int i = 0; i < size; i++ )
 			if ( null != data[i] && data[i].getKey().equals( key ) )
 				return i;
 
-		return -1;
+		return NOT_FOUND;
 	}
 
 }
