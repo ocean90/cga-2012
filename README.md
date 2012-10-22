@@ -1,8 +1,10 @@
-Repo für das Studium
-====================
+#Repository für das Studium
+*FH Köln - Campus Gummersbach*
 
-Du studierst nicht und hast keine Ahnung hiervon? Dann kannst du getrost weitergehen. _Gehe aber nicht über Los und ziehe keine 4.000€ ein!_
+Verschiedene Lösungen für Aufgaben aus den folgenden Praktika:
 
+* [AP2](http://www.gm.fh-koeln.de/~ehses/ap/) im SS '12
+* [CGA](http://www.gm.fh-koeln.de/~hstl/CGA/12-13/) im WS '12/13
 
 Alle Angaben ohne Gewähr. Sehe dies als Hilfestellung an. __Nur Kopieren hilft nicht.__
 
