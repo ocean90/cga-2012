@@ -63,7 +63,7 @@ public abstract class Graph extends AbstractShape {
 	/**
 	 * Viewport-Ausdehnung: Y-Maximum
 	 */
-	public int viewYMax = ( Framework.getInstance().getHeight() / 2 ) - 50;
+	public int viewYMax = ( Framework.getInstance().getHeight() / 2 ) - 50; // Höhe "Title Bar" abziehen
 
 	/**
 	 * Speichert den X-Wert des vorherigen Punktes
@@ -89,17 +89,17 @@ public abstract class Graph extends AbstractShape {
 	public boolean useLines = true;
 
 	/**
-	 * BETA: Wenn true wird ein Grid im 0.5er Intervall angelegt.
+	 * Wenn true wird ein Grid im 0.5er Intervall angelegt.
 	 */
 	public boolean showGrid = true;
 
 	/**
-	 * BETA: Deaktiviert das Clipping.
+	 * BETA: Deaktiviert das "Clipping".
 	 */
-	private boolean noClipping = true;
+	private boolean noClipping = false;
 
 	/**
-	 * Konstruktor: Clean
+	 * Konstruktor: Standardwerte
 	 */
 	public Graph() {}
 
@@ -155,7 +155,6 @@ public abstract class Graph extends AbstractShape {
 
 		// Grid zeichnen
 		if ( showGrid ) {
-			renderer.setColor( Color.lightGray );
 
 			// 0.5er Intervall X-Achse
 			for ( double j = xMinInt; j <= xMaxInt; j += 0.5 ) {
@@ -165,6 +164,7 @@ public abstract class Graph extends AbstractShape {
 					transformX( j ),
 					transformY( yMax ) + lineOverflow
 				);
+				half.setColor( Color.lightGray );
 				half.render( renderer );
 			}
 
@@ -176,10 +176,9 @@ public abstract class Graph extends AbstractShape {
 					transformX( xMax ) + lineOverflow,
 					transformY( j )
 				);
+				half.setColor( Color.lightGray );
 				half.render( renderer );
 			}
-
-			renderer.setColor( Color.black );
 		}
 
 		// 1er Intervall X-Achse
@@ -311,10 +310,8 @@ public abstract class Graph extends AbstractShape {
 					);
 
 					// Mit Farbe Blau rendern
-					renderer.setColor( Color.blue );
-				//	line.setColor( Color.blue ); // Bug?
+					line.setColor( Color.blue );
 					line.render( renderer );
-					renderer.setColor( Color.black );
 				}
 
 				// Punkt speichern
