@@ -22,7 +22,7 @@ import org.amcgala.framework.shape.util.CompositeShape;
  */
 public class Pendel extends AbstractShape {
 	// Startposition
-	private Vector3d sphereStartPosition = new Vector3d( 150, 150, 150 );
+	private Vector3d sphereStartPosition = new Vector3d( 100, 200, 200 );
 
 	// Geschwindigkeit
 	private Vector3d sphereSpeed = new Vector3d( 0, 0, 0 );
@@ -47,15 +47,12 @@ public class Pendel extends AbstractShape {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pendel() {
 		// Startposition des Pendels festlegen
-		pendel.setPosition(
-			sphereStartPosition.x,
-			sphereStartPosition.y,
-			sphereStartPosition.z
-		);
+		pendel.setPosition( sphereStartPosition );
 
 		// Radius des Pendels (Kreises)
 		pendel.setRadius( 50 );
 
+		// Farbe des Pendels
 		pendel.setColor( Color.red );
 
 		this.setAnimation( new Animation( this ) {
@@ -63,21 +60,22 @@ public class Pendel extends AbstractShape {
 			public void update() {
 				// Aktuelle Pendel Position
 				Vector3d currentPosition = pendel.getPosition();
+				Vector3d newPosition = new Vector3d( 0, 0, 0 );
 
 				// Neue x-Position
 				sphereSpeed.x = sphereAcceleration.x * currentPosition.x + sphereAttenuation.x * sphereSpeed.x;
-				double x = currentPosition.x + sphereSpeed.x;
+				newPosition.x = currentPosition.x + sphereSpeed.x;
 
 				// Neue y-Position
 				sphereSpeed.y = sphereAcceleration.y * currentPosition.y + sphereAttenuation.y * sphereSpeed.y;
-				double y = currentPosition.y + sphereSpeed.y;
+				newPosition.y = currentPosition.y + sphereSpeed.y;
 
 				// Neue z-Position
 				sphereSpeed.z = sphereAcceleration.z * currentPosition.z + sphereAttenuation.z * sphereSpeed.z;
-				double z = currentPosition.z + sphereSpeed.z;
+				newPosition.z = currentPosition.z + sphereSpeed.z;
 
 				// Neue Pendel Position setzen
-				pendel.setPosition( x, y, z );
+				pendel.setPosition( newPosition );
 
 				// Pendel Position speichern
 				positions.add( pendel.getPosition() );
@@ -114,42 +112,13 @@ public class Pendel extends AbstractShape {
 	 * @param renderer
 	 */
 	private void drawBox( Renderer renderer ) {
-		// TODO
 		Box box = new Box(
-			new Vector3d( 0, 0, 0 ),
-			200,
-			200,
-			300
+			new Vector3d( -200, -200, 200 ),
+			400,
+			400,
+			400
 		);
-		//box.render(renderer);
-
-		Vector3d
-			a = new Vector3d(    0, -200, -300 ),
-			b = new Vector3d(    0, -200,  300 ),
-			c = new Vector3d(  300, -200,    0 ),
-			d = new Vector3d( -300, -200,    0 ),
-			e = new Vector3d(    0,  200, -300 ),
-			f = new Vector3d(    0,  200,  300 ),
-			g = new Vector3d(  300,  200,    0 ),
-			h = new Vector3d( -300,  200,    0 );
-
-		CompositeShape lines = new CompositeShape();
-		lines.add( new Line( a, e ) );
-		lines.add( new Line( b, f ) );
-		lines.add( new Line( c, g ) );
-		lines.add( new Line( d, h ) );
-
-		lines.add( new Line( a, c ) );
-		lines.add( new Line( c, b ) );
-		lines.add( new Line( d, b ) );
-		lines.add( new Line( a, d ) );
-
-		lines.add( new Line( e, g ) );
-		lines.add( new Line( g, f ) );
-		lines.add( new Line( h, f ) );
-		lines.add( new Line( e, h ) );
-
-		lines.render(renderer);
+		box.render(renderer);
 	}
 
 	/**
