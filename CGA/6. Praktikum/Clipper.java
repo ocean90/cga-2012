@@ -10,6 +10,8 @@ import org.amcgala.framework.shape.Circle;
 import org.amcgala.framework.shape.Line;
 import org.amcgala.framework.shape.util.CompositeShape;
 
+import praktikum.sechs.ClippingAlgorithm.LineOutside;
+
 
 public class Clipper extends AbstractShape {
 	public int xmin = -200;
@@ -97,7 +99,12 @@ public class Clipper extends AbstractShape {
 				or,
 				ur
 			);
-			clipped.newLine().render( renderer );
+
+			try {
+				clipped.newLine().render( renderer );
+			} catch ( LineOutside e ) {
+				points.destroy();
+			}
 		}
 	}
 
