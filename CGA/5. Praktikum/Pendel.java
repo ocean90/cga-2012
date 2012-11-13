@@ -29,8 +29,7 @@ public class Pendel extends AbstractShape {
 	private Vector3d sphereAcceleration = new Vector3d( -0.1, -0.2, -0.15 );
 
 	// Dämpfung
-	private Vector3d sphereAttenuation = new Vector3d( 0.95, 0.95, 0.95 );
-	//private Vector3d sphereAttenuation = new Vector3d( 1, 1, 1 );
+	private Vector3d sphereAttenuation = new Vector3d( 0.9, 0.9, 0.9 );
 
 	// Pendel
 	private Circle pendel = new Circle( 0, 0, 0, 0 );
@@ -68,11 +67,14 @@ public class Pendel extends AbstractShape {
 					" z: " + (int) currentPosition.z
 				);
 
+				// Prüfen, ob der Pendel in der Mitte angekommen ist
 				if (
 					(int) currentPosition.x == 0 &&
 					(int) currentPosition.y == 0 &&
 					(int) currentPosition.z == 0
 				) {
+					// Entfernt die erste Position aus der Queue, um die
+					// Verfolgungslinie wieder abzubauen
 					if ( ! positions.isEmpty() )
 						positions.pop();
 				} else {
