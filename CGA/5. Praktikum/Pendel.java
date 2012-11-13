@@ -3,7 +3,6 @@ package praktikum.fuenf;
 import java.awt.Color;
 import java.util.ArrayDeque;
 import java.util.Iterator;
-import java.util.Queue;
 
 import org.amcgala.framework.animation.Animation;
 import org.amcgala.framework.math.Vector3d;
@@ -30,13 +29,14 @@ public class Pendel extends AbstractShape {
 	private Vector3d sphereAcceleration = new Vector3d( -0.1, -0.2, -0.15 );
 
 	// Dämpfung
-	private Vector3d sphereAttenuation = new Vector3d( 0.9, 0.9, 0.9 );
+	private Vector3d sphereAttenuation = new Vector3d( 0.95, 0.95, 0.95 );
+	//private Vector3d sphereAttenuation = new Vector3d( 1, 1, 1 );
 
 	// Pendel
 	private Circle pendel = new Circle( 0, 0, 0, 0 );
 
 	// Queue
-	private Queue<Vector3d> positions = new ArrayDeque<Vector3d>();
+	private ArrayDeque<Vector3d> positions = new ArrayDeque<Vector3d>();
 
 	/**
 	 * Pendel initialisieren.
@@ -47,6 +47,7 @@ public class Pendel extends AbstractShape {
 	public Pendel() {
 		// Startposition des Pendels festlegen
 		pendel.setPosition( sphereStartPosition );
+		positions.add( pendel.getPosition() );
 
 		// Radius des Pendels (Kreises)
 		pendel.setRadius( 50 );
@@ -67,26 +68,35 @@ public class Pendel extends AbstractShape {
 					" z: " + (int) currentPosition.z
 				);
 
-				// Neue Pendel Position
-				Vector3d newPosition = new Vector3d( 0, 0, 0 );
+				if (
+					(int) currentPosition.x == 0 &&
+					(int) currentPosition.y == 0 &&
+					(int) currentPosition.z == 0
+				) {
+					if ( ! positions.isEmpty() )
+						positions.pop();
+				} else {
+					// Neue Pendel Position
+					Vector3d newPosition = new Vector3d( 0, 0, 0 );
 
-				// Neue x-Position
-				sphereSpeed.x = sphereAcceleration.x * currentPosition.x + sphereAttenuation.x * sphereSpeed.x;
-				newPosition.x = currentPosition.x + sphereSpeed.x;
+					// Neue x-Position
+					sphereSpeed.x = sphereAcceleration.x * currentPosition.x + sphereAttenuation.x * sphereSpeed.x;
+					newPosition.x = currentPosition.x + sphereSpeed.x;
 
-				// Neue y-Position
-				sphereSpeed.y = sphereAcceleration.y * currentPosition.y + sphereAttenuation.y * sphereSpeed.y;
-				newPosition.y = currentPosition.y + sphereSpeed.y;
+					// Neue y-Position
+					sphereSpeed.y = sphereAcceleration.y * currentPosition.y + sphereAttenuation.y * sphereSpeed.y;
+					newPosition.y = currentPosition.y + sphereSpeed.y;
 
-				// Neue z-Position
-				sphereSpeed.z = sphereAcceleration.z * currentPosition.z + sphereAttenuation.z * sphereSpeed.z;
-				newPosition.z = currentPosition.z + sphereSpeed.z;
+					// Neue z-Position
+					sphereSpeed.z = sphereAcceleration.z * currentPosition.z + sphereAttenuation.z * sphereSpeed.z;
+					newPosition.z = currentPosition.z + sphereSpeed.z;
 
-				// Neue Pendel Position setzen
-				pendel.setPosition( newPosition );
+					// Neue Pendel Position setzen
+					pendel.setPosition( newPosition );
 
-				// Pendel Position speichern
-				positions.add( pendel.getPosition() );
+					// Pendel Position speichern
+					positions.add( pendel.getPosition() );
+				}
 			}
 		} );
 	}
@@ -135,19 +145,19 @@ public class Pendel extends AbstractShape {
 	 * @param renderer
 	 */
 	private void drawTraceLine( Renderer renderer ) {
-		// Vorheriger Vektor speichern, fängt beim
-		// Startpunkt des Pegels an
-		Vector3d prev = sphereStartPosition;
+		// Vorheriger Vektor
+		Vector3d prev = null;
 
 		for ( Iterator<Vector3d> iter = positions.iterator(); iter.hasNext(); ) {
 			// Nächsten Vektor holen
 			Vector3d next = iter.next();
 
 			// Linie zwischen alten und neuen Vektor rendern
-			Line line = new Line( prev, next );
-			line.setColor( Color.gray );
-			line.render( renderer );
-
+			if ( prev != null ) {
+				Line line = new Line( prev, next );
+				line.setColor( Color.gray );
+				line.render( renderer );
+			}
 			// Alten Vektor mit neuem Vektor überschreiben
 			prev = next;
 		}
