@@ -9,7 +9,13 @@ import org.amcgala.framework.scenegraph.Node;
 import com.google.common.eventbus.Subscribe;
 
 
-
+/**
+ * Hauptprogramm für das Clippen von Linien zwischen zwei
+ * Punkten.
+ *
+ * @author Dominik Schilling
+ *
+ */
 public class ClipperMain extends Amcgala implements InputHandler {
 	// Szene
 	private Scene scene = new Scene( "ClipperScene" );
@@ -17,8 +23,12 @@ public class ClipperMain extends Amcgala implements InputHandler {
 	// Knoten
 	private Node node = new Node( "ClipperNode" );
 
+	// Clipper
 	private Clipper clipper =  new Clipper();
 
+	/**
+	 * Kontruktor.
+	 */
 	public ClipperMain() {
 		// Szene hinzufügen
 		this.framework.addScene( scene );
@@ -30,13 +40,24 @@ public class ClipperMain extends Amcgala implements InputHandler {
 		this.framework.addInputHandler( this, "ClipperInput" );
 	}
 
-	public static void main(String[] args) {
+	/**
+	 * Gogogo.
+	 *
+	 * @param args
+	 */
+	public static void main( String[] args ) {
 		new ClipperMain();
 	}
 
+	/**
+	 * Händelt das Hinzufügen eines Punktens bei einem
+	 * Mausklick.
+	 *
+	 * @param e
+	 */
 	@Subscribe
-	public void addPoint(MouseClickedEvent e) {
-		clipper.addPoint(e);
+	public void addPoint( MouseClickedEvent e ) {
+		clipper.addPoint( e );
 	}
 
 }

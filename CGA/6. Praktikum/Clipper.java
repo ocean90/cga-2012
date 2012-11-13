@@ -14,9 +14,9 @@ import praktikum.sechs.ClippingAlgorithm.LineOutside;
 
 
 public class Clipper extends AbstractShape {
-	public int xmin = -200;
+	public int xmin = -300;
 	public int ymin = -200;
-	public int xmax =  200;
+	public int xmax =  300;
 	public int ymax =  200;
 
 	// Window-Koordinate: unten links
@@ -34,10 +34,16 @@ public class Clipper extends AbstractShape {
 	// Speicherplatz für die Punkte
 	private Points points = new Points();
 
+	/**
+	 * Konstruktor.
+	 */
 	public Clipper() {
 		this.setWindow();
 	}
 
+	/**
+	 * Setzt die Eckpunkte des Fensters fest.
+	 */
 	private void setWindow() {
 		// Window-Koordinate: unten links
 		this.ul = new Vector3d( xmin, ymin, 0 );
@@ -66,6 +72,11 @@ public class Clipper extends AbstractShape {
 		this.drawLine( renderer );
 	}
 
+	/**
+	 * Rendert die Box.
+	 *
+	 * @param renderer
+	 */
 	private void drawBox( Renderer renderer ) {
 		CompositeShape lines = new CompositeShape();
 		lines.add( new Line( ul, ol ) );
@@ -76,22 +87,40 @@ public class Clipper extends AbstractShape {
 		lines.render(renderer);
 	}
 
+	/**
+	 * Rendert die Punkte.
+	 *
+	 * @param renderer
+	 */
 	private void drawPoints( Renderer renderer ) {
+		// Erster Punkt
 		if ( null != points.getPoint1() ) {
-			Circle point1 = new Circle( points.getPoint1(), 5 );
-			point1.setColor( Color.red );
-			point1.render(renderer);
+			for ( int i = 0; i < 8; i++ ) {
+				Circle point1 = new Circle( points.getPoint1(), i++ );
+				point1.setColor( Color.red );
+				point1.render(renderer);
+			}
 		}
 
+		// Zweiter Punkt
 		if( null != points.getPoint2() ) {
-			Circle point2 = new Circle( points.getPoint2(), 5 );
-			point2.setColor( Color.red );
-			point2.render(renderer);
+			for ( int i = 0; i < 8; i++ ) {
+				Circle point2 = new Circle( points.getPoint2(), i++ );
+				point2.setColor( Color.red );
+				point2.render(renderer);
+			}
 		}
 	}
 
+	/**
+	 * Rendert die geclippte Verbindungsline.
+	 *
+	 * @param renderer
+	 */
 	private void drawLine( Renderer renderer ) {
+		// Nur wenn zwei Punkte vorhanden sind
 		if ( points.available() ) {
+			// Algorithmus aufrufen
 			ClippingAlgorithm clipped = new ClippingAlgorithm(
 				new Line( points.getPoint1(), points.getPoint2() ),
 				ul,
@@ -100,6 +129,11 @@ public class Clipper extends AbstractShape {
 				ur
 			);
 
+			// Versuche die Linie zu zeichnen.
+			// Es wird eine Exception ausgeworfen,
+			// wenn die Linie außerhalb ist.
+			// Ist die Linie außerhalb, dann werden
+			// die Punkte gelöscht.
 			try {
 				clipped.newLine().render( renderer );
 			} catch ( LineOutside e ) {
@@ -108,6 +142,11 @@ public class Clipper extends AbstractShape {
 		}
 	}
 
+	/**
+	 * Fügt einen Punkt hinzu.
+	 *
+	 * @param e
+	 */
 	public void addPoint(MouseClickedEvent e) {
 		points.add(
 			Vector3d.createVector3d(
