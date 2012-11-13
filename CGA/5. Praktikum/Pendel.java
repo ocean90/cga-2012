@@ -12,7 +12,6 @@ import org.amcgala.framework.shape.AbstractShape;
 import org.amcgala.framework.shape.Circle;
 import org.amcgala.framework.shape.Line;
 import org.amcgala.framework.shape.shape3d.Box;
-import org.amcgala.framework.shape.util.CompositeShape;
 
 
 /**
@@ -60,6 +59,15 @@ public class Pendel extends AbstractShape {
 			public void update() {
 				// Aktuelle Pendel Position
 				Vector3d currentPosition = pendel.getPosition();
+
+				// Debug
+				System.out.println(
+					"x: " + (int) currentPosition.x +
+					" y: " + (int) currentPosition.z +
+					" z: " + (int) currentPosition.z
+				);
+
+				// Neue Pendel Position
 				Vector3d newPosition = new Vector3d( 0, 0, 0 );
 
 				// Neue x-Position
