@@ -60,7 +60,7 @@ public class Sphere extends AbstractShape {
 				shadingInfo.normal = ( temp.add( ray.direction.times( t ) ) );
 				shadingInfo.hitPoint = ray.origin.add( ray.direction.times( t ) );
 				shadingInfo.color = getRGBColor();
-				System.out.println(shadingInfo.color);
+
 				return true;
 			}
 
@@ -71,7 +71,7 @@ public class Sphere extends AbstractShape {
 				shadingInfo.normal = ( temp.add( ray.direction.times( t ) ) );
 				shadingInfo.hitPoint = ray.origin.add( ray.direction.times( t ) );
 				shadingInfo.color = getRGBColor();
-				System.out.println(shadingInfo.color);
+
 				return true;
 			}
 		}
