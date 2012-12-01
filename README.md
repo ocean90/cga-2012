@@ -9,5 +9,3 @@ Verschiedene Lösungen für Aufgaben aus den folgenden Praktika:
 Alle Angaben ohne Gewähr. Sehe dies als Hilfestellung an. __Nur Kopieren hilft nicht.__
 
 Kontakt: <dominik.schilling@smail.fh-koeln.de>
-
-Test.
