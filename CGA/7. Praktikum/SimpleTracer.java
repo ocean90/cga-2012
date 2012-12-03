@@ -50,14 +50,19 @@ public class SimpleTracer implements Tracer {
 		 */
 
 		Collection<Shape> shapes = scene.getShapes();
+
+		ShadingInfo tmp = new ShadingInfo(); 
 		for ( Shape shape : shapes ) {
-			shape.hit( ray, result );
+			if ( shape.hit( ray, result ) )
+				if ( tmp.t < result.t && tmp.t < 0)
+					result = tmp;
+
 		}
 
 		RGBColor bg = scene.getBackground();
 
 		// Debug
-		System.out.println(result.color);
+		//System.out.println(result.color);
 
 		return ( result.color != null ) ? result.color : bg;
 	}
