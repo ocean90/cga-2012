@@ -1,7 +1,5 @@
 package org.amcgala.framework.raytracer.tracer;
 
-import java.util.Collection;
-
 import org.amcgala.Scene;
 import org.amcgala.framework.raytracer.RGBColor;
 import org.amcgala.framework.raytracer.Ray;
@@ -33,24 +31,24 @@ public class RecursiveTracer implements Tracer {
 	}
 
 	@Override
-	public RGBColor trace(Ray ray, Scene scene, int depth) {
+	public RGBColor trace( Ray ray, Scene scene, int depth ) {
 
-		// Ist die maximale Rekursionstiefe erreicht?
+		// Maximale Rekursionstiefe erreicht
 		if( depth > maxDepth ) {
 			return scene.getBackground();
 		}
 
 		ShadingInfo result = null;
-		Collection<Shape> shapes = scene.getShapes();
-		for ( Shape shape : shapes ) {
+		for ( Shape shape : scene.getShapes() ) {
 			ShadingInfo temp = new ShadingInfo();
 
-			temp.depth = depth; // Rekursionstiefe
-			temp.scene = scene; // aktuelle Szene
-			temp.tracer = this; // Referenz auf den Tracer
+			temp.depth = depth;            // Rekursionstiefe
+			temp.scene = scene;            // aktuelle Szene
+			temp.tracer = this;            // Referenz auf den Tracer
+			temp.label = shape.getLabel(); // Label
 
 			if ( shape.hit( ray, temp ) ) {
-				if ( result == null || temp.t < result.t) {
+				if ( result == null || temp.t < result.t ) {
 					result = temp;
 				}
 			}

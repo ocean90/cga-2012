@@ -32,18 +32,16 @@ public class Sphere extends AbstractShape {
 		// Siehe PDF aus ILIAS.
 		Vector3d temp = ray.origin.sub( center );
 		double a = ray.direction.dot( ray.direction );
-		double b = temp.times( 2.0 ).dot( ray.direction );
+		double b = ray.direction.dot( temp ) * 2;
 		double c = temp.dot( temp ) - radius * radius;
-		double disc = b * b - 4.0 * a * c;
+		double discriminant = b * b - 4.0 * a * c;
 
-		if ( disc < 0.0 ) {
-			return false;
-		} else {
-			double e = Math.sqrt( disc );
-			double denom = 2.0 * a;
+		if ( discriminant >= 0 ) {
+			double e = Math.sqrt( discriminant );
+			double denominator = 2.0 * a;
 
-			double t1 = ( -b - e ) / denom;
-			double t2 = ( -b + e ) / denom;
+			double t1 = ( -b - e ) / denominator;
+			double t2 = ( -b + e ) / denominator;
 			if ( t1 > MathConstants.EPSILON ) {
 				shadingInfo.t = t1;
 			} else if ( t2 > MathConstants.EPSILON ) {
@@ -52,7 +50,7 @@ public class Sphere extends AbstractShape {
 				return false;
 			}
 
-			shadingInfo.normal = ( temp.add( ray.direction.times( shadingInfo.t ) ) ).times( 1/radius );
+			shadingInfo.normal = temp.add( ray.direction.times( shadingInfo.t ) ).times( 1 / radius );
 			shadingInfo.hitPoint = ray.origin.add( ray.direction.times( shadingInfo.t ) );
 
 			if ( shadingInfo.tracer != null && shadingInfo.tracer instanceof RecursiveTracer  )
@@ -62,6 +60,8 @@ public class Sphere extends AbstractShape {
 
 			return true;
 		}
+
+		return false;
 	}
 
 	public RGBColor getRGBColor() {

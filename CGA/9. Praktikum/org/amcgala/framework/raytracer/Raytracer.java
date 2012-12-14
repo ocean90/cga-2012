@@ -39,7 +39,7 @@ public class Raytracer {
 
 	public Raytracer() {
 		//tracer = new SimpleTracer();
-		tracer = new RecursiveTracer( 10 );
+		tracer = new RecursiveTracer( 5 );
 
 		viewPlane = new ViewPlane( 600, 600, 1 );
 
@@ -60,7 +60,7 @@ public class Raytracer {
 		for ( int col = 0; col < viewPlane.getHorizontalResolution(); col++ ) {
 			for ( int row = 0; row < viewPlane.getVerticalResolution(); row++ ) {
 				Vector3d origin = viewPlane.getWorldCoordinates( col, row );
-				direction = origin.sub( eye ); // Prak 9
+				direction = origin.sub( eye );
 				RGBColor color = tracer.trace( new Ray( origin, direction ), scene );
 				viewPlane.drawPixel( col, row, color );
 			}
