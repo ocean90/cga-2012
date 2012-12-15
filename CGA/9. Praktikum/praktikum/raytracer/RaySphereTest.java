@@ -25,7 +25,8 @@ public class RaySphereTest {
 		//testOne();
 		//testTwo();
 		//testThree();
-		testFour();
+		//testFour();
+		mickeyMouse();
 
 		CheckerBoard checkerboard = new CheckerBoard(
 			new Vector3d( 0, -300, 0 ),
@@ -204,7 +205,7 @@ public class RaySphereTest {
 		sphere3.setMaterial( new MirrorMaterial( 0.25f, 0.4f, sphere3.getRGBColor() ) );
 		scene.add( sphere3, sphereNode );
 
-		Sphere sphere4 = new Sphere( new Vector3d( -200, -100, -100 ), 80 );
+		Sphere sphere4 = new Sphere( new Vector3d( 0, 0, -1700 ), 800 );
 		sphere4.setColor( new RGBColor( 1, 1, 1 ) ); // Weiß
 		sphere4.setMaterial( new MirrorMaterial( 0.25f, 0.4f, sphere4.getRGBColor() ) );
 		scene.add( sphere4, sphereNode );
@@ -216,5 +217,44 @@ public class RaySphereTest {
 	 */
 	private float b2f( int bytes ) {
 		return ( 1.0f / 255 ) * bytes;
+	}
+
+	private void mickeyMouse() {
+		scene.setBackground( new RGBColor( .5f, .5f, .5f ) );
+
+		Sphere head = new Sphere( new Vector3d( 0, 0, -400 ), 150 );
+		head.setColor( new RGBColor( 0, 0, 0 ) ); // Black
+		head.setMaterial( new MirrorMaterial( 0.25f, 0.4f, head.getRGBColor() ) );
+		scene.add( head, sphereNode );
+
+		Sphere earl = new Sphere( new Vector3d( -150, 100, -400 ), 80 );
+		earl.setColor( new RGBColor( .5f, .5f, 0 ) ); // Black
+		earl.setMaterial( new MirrorMaterial( 0.25f, 0.4f, earl.getRGBColor() ) );
+		scene.add( earl, sphereNode );
+
+		Sphere earr = new Sphere( new Vector3d( 150, 100, -400 ), 80 );
+		earr.setColor( new RGBColor( .5f, .5f, 0 ) ); // Black
+		earr.setMaterial( new MirrorMaterial( 0.25f, 0.4f, earr.getRGBColor() ) );
+		scene.add( earr, sphereNode );
+
+		Sphere nose = new Sphere( new Vector3d( 0, -10, -250 ), 40 );
+		nose.setColor( new RGBColor( 1, 1, 1 ) ); // White
+		nose.setMaterial( new MirrorMaterial( 0.25f, 0.4f, nose.getRGBColor() ) );
+		scene.add( nose, sphereNode );
+
+		Sphere eyel = new Sphere( new Vector3d( -70, 50, -300 ), 30 );
+		eyel.setColor( new RGBColor( 0, 0, 1 ) ); // Blue
+		eyel.setMaterial( new MirrorMaterial( 0.25f, 0.4f, eyel.getRGBColor() ) );
+		scene.add( eyel, sphereNode );
+
+		Sphere eyer = new Sphere( new Vector3d( 70, 50, -300 ), 30 );
+		eyer.setColor( new RGBColor( 0, 0, 1 ) ); // Blue
+		eyer.setMaterial( new MirrorMaterial( 0.25f, 0.4f, eyer.getRGBColor() ) );
+		scene.add( eyer, sphereNode );
+
+		Sphere body = new Sphere( new Vector3d( 0, -250, -450 ), 200 );
+		body.setColor( new RGBColor( .3f, 0, 0 ) ); // Red
+		body.setMaterial( new MirrorMaterial( 0.25f, 0.4f, body.getRGBColor() ) );
+		scene.add( body, sphereNode );
 	}
 }
