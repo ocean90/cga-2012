@@ -37,42 +37,16 @@ public class MirrorMaterial extends Material {
 	@Override
 	public RGBColor getColor( ShadingInfo hit ) {
 
-		// Reflektion
 
-		// ToDo: Eigene Methode
-		/*Vector3d reflectedDirection = reflector( hit.normal, hit.ray.direction.normalize() );
-		RGBColor reflColor = hit.tracer.trace(
-			new Ray(
-				hit.hitPoint,        // Neuer Schnittpunkt
-				reflectedDirection   // Neue Richtung
-			),
-			hit.scene,               // Selbe Szene
-			hit.depth + 1            // Tiefe erhöhen
-		);*/
-
-		RGBColor hitColor = baseColor.times( 1 - reflectionCoefficient - refractionCoefficient ).add(
+		return baseColor.times(
+			1 - reflectionCoefficient - refractionCoefficient
+		).add(
 			getReflectedRGBColor( hit ).times( reflectionCoefficient )
+		).add(
+			//getRefractedRGBColor( hit ).times( refractionCoefficient )
+			getRefractedRGBColor2( hit ) != null ? getRefractedRGBColor2( hit ).times( refractionCoefficient ) : new RGBColor( 0, 0, 0 )
 		);
 
-		// Brechung
-
-		/*Vector3d refractedDirection = refractor( hit.normal, hit.ray.direction.normalize() );
-		if ( refractedDirection != null ) {
-			RGBColor refrColor = hit.tracer.trace(
-				new Ray(
-					hit.hitPoint,
-					refractedDirection
-				),
-				hit.scene,
-				hit.depth + 1
-			);
-
-			hitColor.add( refrColor.times( refractionCoefficient ) );
-		}*/
-
-		hitColor.add( getRefractedRGBColor( hit ).times( refractionCoefficient ) );
-
-		return hitColor;
 	}
 
 	/**
@@ -82,8 +56,9 @@ public class MirrorMaterial extends Material {
 	 * @return
 	 */
 	RGBColor getReflectedRGBColor( ShadingInfo hit ) {
-		double c = hit.normal.dot( hit.ray.direction.times( -1 ) );
-		Vector3d reflectedDirection = hit.ray.direction.sub( hit.normal.times( -2 * c ) );
+		Vector3d reflectedDirection = hit.ray.direction.add(
+			hit.normal.times( 2 ).times( hit.normal.dot( hit.ray.direction ) * -1 )
+		).normalize();
 
 		Ray reflectedRay = new Ray(
 			hit.hitPoint.travel(
@@ -103,7 +78,7 @@ public class MirrorMaterial extends Material {
 	/**
 	 * Farbe für Spiegelung
 	 *
-	 * @author: Robert
+	 * @author: Robert Giacinto
 	 * @param hit
 	 * @return
 	 */
@@ -117,14 +92,14 @@ public class MirrorMaterial extends Material {
 
 		Vector3d t0 = i.times( n );
 		Vector3d t1 = hit.normal.times(  n * costhetai + Math.sqrt( 1 - sin2thetat ) );
-		Vector3d t = t0.sub( t1 );
+		Vector3d refractedDirection = t0.sub( t1 );
 
 		Ray refractedRay = new Ray(
 			hit.hitPoint.travel(
-				t,
+				refractedDirection,
 				MathConstants.EPSILON
 			),
-			t
+			refractedDirection
 		);
 
 		return hit.tracer.trace(
@@ -136,34 +111,36 @@ public class MirrorMaterial extends Material {
 
 	/**
 	 * PDF: http://www.flipcode.com/archives/reflection_transmission.pdf
-	 * @param normal
-	 * @param incident
+	 * @param hit
 	 * @return
-	 * @TODO entfernen
 	 */
-	Vector3d reflector( Vector3d normal, Vector3d incident ) {
-		double cos1 = normal.dot( incident );
-		return incident.sub( normal.times( 2 * cos1 ) );
-	}
-
-	/**
-	 * PDF: http://www.flipcode.com/archives/reflection_transmission.pdf
-	 * @param normal
-	 * @param incident
-	 * @return
-	 * @TODO entfernen
-	 */
-	Vector3d refractor( Vector3d normal, Vector3d incident ) {
+	RGBColor getRefractedRGBColor2( ShadingInfo hit ) {
 		double n1 = 1;
-		double n2 = 1.5;
-		double n= n1/n2;
-		double cos1 = normal.times(-1).dot( incident );
+		double n2 = 1.5; // @TODO Parameter?
+		double n= n1 / n2;
+		Vector3d i = hit.ray.direction.normalize();
+		double cos1 = hit.normal.times( -1 ).dot( i );
 		double sinT2 = n * n * ( 1.0 - cos1 * cos1 );
+
 		if ( sinT2 > 1.0 )
 			return null;
 
-		// Mit cos1
-		Vector3d tmp = normal.times( n * cos1 + Math.sqrt( 1.0 - sinT2 ) );
-		return incident.times( n ).sub( tmp );
+		// Änderungen gegenüber PDF: Mit cos1 noch multiplizieren!
+		Vector3d tmp = hit.normal.times( n * cos1 + Math.sqrt( 1.0 - sinT2 ) );
+		Vector3d refractedDirection = i.times( n ).sub( tmp );
+
+		Ray refractedRay = new Ray(
+			hit.hitPoint.travel(
+				refractedDirection,
+				MathConstants.EPSILON
+			),
+			refractedDirection
+		);
+
+		return hit.tracer.trace(
+			refractedRay,
+			hit.scene,
+			hit.depth + 1
+		);
 	}
 }

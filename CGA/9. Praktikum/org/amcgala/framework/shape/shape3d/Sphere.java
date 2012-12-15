@@ -9,7 +9,7 @@ import org.amcgala.framework.raytracer.tracer.RecursiveTracer;
 import org.amcgala.framework.shape.AbstractShape;
 
 /**
- * Eine Kugel, über einen Raytracer dargestellt werden kann.
+ * Eine Kugel, die über einen Raytracer dargestellt werden kann.
  *
  * @author Robert Giacinto
  * @since 2.1
@@ -25,11 +25,11 @@ public class Sphere extends AbstractShape {
 	}
 
 	@Override
-	public boolean hit(Ray ray, ShadingInfo shadingInfo) {
+	public boolean hit( Ray ray, ShadingInfo shadingInfo ) {
 		shadingInfo.ray = ray;
 		shadingInfo.label = getLabel();
 
-		// Siehe PDF aus ILIAS.
+		// Siehe PDF im ILIAS.
 		Vector3d temp = ray.origin.sub( center );
 		double a = ray.direction.dot( ray.direction );
 		double b = ray.direction.dot( temp ) * 2;
@@ -40,25 +40,35 @@ public class Sphere extends AbstractShape {
 			double e = Math.sqrt( discriminant );
 			double denominator = 2.0 * a;
 
-			double t1 = ( -b - e ) / denominator;
-			double t2 = ( -b + e ) / denominator;
-			if ( t1 > MathConstants.EPSILON ) {
-				shadingInfo.t = t1;
-			} else if ( t2 > MathConstants.EPSILON ) {
-				shadingInfo.t = t1;
+			double t = ( -b - e ) / denominator;
+
+			if ( t > MathConstants.EPSILON ) {
+				shadingInfo.t = t;
+				shadingInfo.normal = temp.add( ray.direction.times( shadingInfo.t ) ).times( 1 / radius );
+				shadingInfo.hitPoint = ray.origin.add( ray.direction.times( shadingInfo.t ) );
+
+				if ( shadingInfo.tracer != null && shadingInfo.tracer instanceof RecursiveTracer  )
+					shadingInfo.color = material != null ? getMaterial().getColor( shadingInfo ) : getRGBColor();
+				else
+					shadingInfo.color = getRGBColor();
+
+				return true;
 			} else {
-				return false;
+				t = ( -b + e ) / denominator;
+
+				if ( t > MathConstants.EPSILON ) {
+					shadingInfo.t = t;
+					shadingInfo.normal = temp.add( ray.direction.times( shadingInfo.t ) ).times( 1 / radius );
+					shadingInfo.hitPoint = ray.origin.add( ray.direction.times( shadingInfo.t ) );
+
+					if ( shadingInfo.tracer != null && shadingInfo.tracer instanceof RecursiveTracer  )
+						shadingInfo.color = material != null ? getMaterial().getColor( shadingInfo ) : getRGBColor();
+					else
+						shadingInfo.color = getRGBColor();
+
+					return true;
+				}
 			}
-
-			shadingInfo.normal = temp.add( ray.direction.times( shadingInfo.t ) ).times( 1 / radius );
-			shadingInfo.hitPoint = ray.origin.add( ray.direction.times( shadingInfo.t ) );
-
-			if ( shadingInfo.tracer != null && shadingInfo.tracer instanceof RecursiveTracer  )
-				shadingInfo.color = material != null ? getMaterial().getColor( shadingInfo ) : getRGBColor();
-			else
-				shadingInfo.color = getRGBColor();
-
-			return true;
 		}
 
 		return false;

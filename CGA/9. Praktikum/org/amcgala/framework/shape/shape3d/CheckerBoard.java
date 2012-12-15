@@ -21,7 +21,7 @@ public class CheckerBoard extends AbstractShape {
 	 * @param center
 	 * @param radius
 	 */
-	public CheckerBoard(Vector3d origin, Vector3d direct1, Vector3d direct2) {
+	public CheckerBoard( Vector3d origin, Vector3d direct1, Vector3d direct2) {
 		this.origin = origin;
 		this.direct1 = direct1;
 		this.direct2 = direct2;
@@ -39,9 +39,7 @@ public class CheckerBoard extends AbstractShape {
 		if ( nenner != 0 ) {
 			double t = (- normal.dot( ray.origin ) - abstand ) / nenner;
 
-			if ( t < 0 ) {
-				return false;
-			} else {
+			if ( t >= 0 ) {
 				shadingInfo.t = t;
 				shadingInfo.hitPoint = ray.origin.travel( ray.direction, shadingInfo.t );
 				shadingInfo.normal = normal;
@@ -74,6 +72,7 @@ public class CheckerBoard extends AbstractShape {
 							shadingInfo.color = new RGBColor( 0, 0, 0 ); // Black
 					}
 				}
+
 				return true;
 			}
 		}
