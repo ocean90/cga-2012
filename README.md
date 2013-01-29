@@ -1,10 +1,7 @@
-#Repository für das Studium
+#CGA - Computer Graphik für Medieninformatik 3
 *FH Köln - Campus Gummersbach*
 
-Lösungen für Aufgaben aus den folgenden Praktika:
-
-* [AP2](http://www.gm.fh-koeln.de/~ehses/ap/) im SS '12
-* [CGA](http://www.gm.fh-koeln.de/~hstl/CGA/12-13/) im WS '12/13
+Lösungen zum [CGA](http://www.gm.fh-koeln.de/~hstl/CGA/12-13/) Praktikum im WS '12/13.
 
 Alle Angaben ohne Gewähr. Sehe dies als Hilfestellung an. __Nur Kopieren hilft nicht.__
 
